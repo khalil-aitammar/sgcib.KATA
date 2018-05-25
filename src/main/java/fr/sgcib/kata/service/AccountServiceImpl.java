@@ -6,9 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Random;
 
-import org.omg.CORBA.SystemException;
-
 import fr.sgcib.kata.entities.Customer;
+import fr.sgcib.kata.exeptions.AccountException;
 
 public class AccountServiceImpl implements AccountService{
 
@@ -24,14 +23,13 @@ public class AccountServiceImpl implements AccountService{
 			BufferedReader buff=new BufferedReader(lecture);
 			String ligne;
 			while ((ligne=buff.readLine())!=null){
-				System.out.println(ligne);
 				
 				if (ligne.equals(name)){
 					Random rand = new Random();
 					Customer client = new Customer( rand.nextInt( Integer.MAX_VALUE ), ligne, 100);
 				}
 				
-				return (ligne.equals(name)) ? true : false;
+				return ligne.equals(name) ? true : false;
 				
 			}
 			buff.close(); 
@@ -42,20 +40,15 @@ public class AccountServiceImpl implements AccountService{
 		return false;
 	}
 	
-	public double withdrawAmount1(Customer client,double amount) {
-		try{
+	public double withdrawAmount(Customer client,double amount) throws AccountException {
+		if(amount<=0){
+			 throw new AccountException(); 
+		}else{
 		return client.getAccountAmount()-10;
 		}
-		catch (Exception e){
-			System.out.println(e.toString());
-			}
-		return amount;
 	}
 
-	public double withdrawAmount(Customer client, double amount) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	
 	
 	
 	
